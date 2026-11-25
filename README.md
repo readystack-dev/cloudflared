@@ -5,7 +5,35 @@ The offline build kit for the Docker image `readystack/cloudflared:2026.11.2-CE-
 - Release: [2026.11.2-CE-ubuntu24.04-r1](https://github.com/readystack-dev/cloudflared/releases/tag/2026.11.2-CE-ubuntu24.04-r1)
 - Image: [`docker.io/readystack/cloudflared:2026.11.2-CE-ubuntu24.04-r1`](https://hub.docker.com/r/readystack/cloudflared/tags), manifest digest `sha256:26e585bb55a1aa5108088bdf9c0e6af5ea6cf5c6f67cb19a253aa3d510c4d253`
 - Product page: https://readystack.dev/products/cloudflared
+- Source and build recipe: https://readystack.dev/products/cloudflared/recipe
+- Build trail: https://readystack.dev/products/cloudflared/trail/2026.11.2-CE-ubuntu24.04-r1
 - Defects: this repository's Issues (defects recorded from 25 November 2026 on) and https://readystack.dev/defects.html?product=cloudflared
+
+## The image
+
+A single container running cloudflared (one static Go binary) as the non-root cloudflared user. It needs a Cloudflare account with a tunnel, and outbound Internet access to Cloudflare (port 7844, QUIC/UDP, falling back to HTTP/2 over TCP). There is no database, no web UI and no data directory; a tunnel run with a token keeps no state on disk.
+
+## Who uses cloudflared and why
+
+Teams who want to publish or reach internal services through Cloudflare Tunnel without opening inbound firewall ports.
+
+cloudflared is the client for Cloudflare Tunnel. It makes outbound-only connections from your network, and requests for your services come back through them, so your servers need no public IP address.
+
+A typical use: A team runs an internal dashboard on a server with no public address. cloudflared on that network opens a Cloudflare Tunnel; users reach the dashboard through the tunnel, and the firewall keeps every inbound port closed.
+
+From the upstream project's own description: https://github.com/cloudflare/cloudflared, https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/.
+
+## This release
+
+- Docker Scout policy grade at release: **A** (94%), graded 2026-11-24 with `docker scout policy` (CLI 1.26.0, docker-default configuration).
+  - Docker Scout counts 7 packages with copyleft licences (GPL, LGPL, MPL), all of them operating-system packages (it counts only packages whose licence it can read; the SBOM lists every component).
+- Signed with ReadyStack's release key (fingerprint `04daa92344a52dbc`): https://readystack.dev/keys/cosign.pub.
+- Runs as a non-root user (`cloudflared`).
+- Attestations on the image: an SPDX SBOM and SLSA provenance v1.
+- Rebuilt from this kit with network egress blocked on 2026-11-24; the rebuilt image digest is the published one.
+- Base: Ubuntu 24.04.
+
+The current grade, measured again every day, is on https://readystack.dev/products/cloudflared.
 
 cloudflared is distributed under its upstream licence (Apache-2.0); the kit contains upstream's source under that licence, and each vendored component under its own.
 
@@ -39,3 +67,5 @@ The build trail (`ReadyStack-cloudflared-2026.11.2-CE-ubuntu24.04-r1.trail.json`
 ## This repository
 
 `recipe/` holds the kit's recipe files (Dockerfiles, build scripts, pins) as published at https://readystack.dev/products/cloudflared/recipe. The complete kit is the release download. Each release is a tag here.
+
+— ReadyStack · https://readystack.dev
