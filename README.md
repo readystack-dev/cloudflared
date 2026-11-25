@@ -1,0 +1,41 @@
+# cloudflared: ReadyStack build kit
+
+The offline build kit for the Docker image `readystack/cloudflared:2026.11.2-CE-ubuntu24.04-r1`. It holds what the image is built from (upstream source, base images, toolchain, pinned dependencies) and the documents, so the image can be rebuilt with no network access (`docker build --network=none`).
+
+- Release: [2026.11.2-CE-ubuntu24.04-r1](https://github.com/readystack-dev/cloudflared/releases/tag/2026.11.2-CE-ubuntu24.04-r1)
+- Image: [`docker.io/readystack/cloudflared:2026.11.2-CE-ubuntu24.04-r1`](https://hub.docker.com/r/readystack/cloudflared/tags), manifest digest `sha256:26e585bb55a1aa5108088bdf9c0e6af5ea6cf5c6f67cb19a253aa3d510c4d253`
+- Product page: https://readystack.dev/products/cloudflared
+- Defects: this repository's Issues (defects recorded from 25 November 2026 on) and https://readystack.dev/defects.html?product=cloudflared
+
+cloudflared is distributed under its upstream licence (Apache-2.0); the kit contains upstream's source under that licence, and each vendored component under its own.
+
+## Download
+
+From the [2026.11.2-CE-ubuntu24.04-r1 release](https://github.com/readystack-dev/cloudflared/releases/tag/2026.11.2-CE-ubuntu24.04-r1): `ReadyStack-cloudflared-2026.11.2-CE-ubuntu24.04-r1.tar.gz` (438.1 MB), SHA-256 `e9e766a60799f070eb5f4253b4405ada4b027cbd50624288b39ef3a209f61736`.
+
+```sh
+sha256sum --check --ignore-missing SHA256SUMS
+```
+
+## Verify and rebuild
+
+The rebuild statement is signed with the ReadyStack release key. Check the signature before you rely on it:
+
+```sh
+cosign verify-blob --key https://readystack.dev/keys/cosign.pub \
+  --bundle ReadyStack-cloudflared-2026.11.2-CE-ubuntu24.04-r1.rebuild.json.sigstore ReadyStack-cloudflared-2026.11.2-CE-ubuntu24.04-r1.rebuild.json
+```
+
+Unpack with `-p` so file modes are kept, then follow the kit's own README.md and docs/REBUILD.md:
+
+```sh
+tar -xpzf ReadyStack-cloudflared-2026.11.2-CE-ubuntu24.04-r1.tar.gz
+cd 2026.11.2-CE-ubuntu24.04-r1
+less README.md docs/REBUILD.md
+```
+
+The build trail (`ReadyStack-cloudflared-2026.11.2-CE-ubuntu24.04-r1.trail.json`, signed the same way, and its Markdown copy) records how this release was built and checked.
+
+## This repository
+
+`recipe/` holds the kit's recipe files (Dockerfiles, build scripts, pins) as published at https://readystack.dev/products/cloudflared/recipe. The complete kit is the release download. Each release is a tag here.

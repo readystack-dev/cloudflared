@@ -1,0 +1,58 @@
+{
+  "schema": "kitforge.build_recipe.v1",
+  "slug": "cloudflared",
+  "image": "readystack/cloudflared:2026.11.2-CE-ubuntu24.04-r1",
+  "build_method": "source-rebuild-go",
+  "source": {
+    "repo": "https://github.com/cloudflare/cloudflared",
+    "ref": "2026.11.2",
+    "builder_image": "golang:1.27.4-bookworm",
+    "go_module_root": "github.com/cloudflare/cloudflared",
+    "go_version_required": "1.27.3",
+    "build_env": {
+      "CGO_ENABLED": "0",
+      "GOTOOLCHAIN": "local"
+    },
+    "_version_note": "2026.10.3 is the latest release (2026-10-21; its RELEASE_NOTES: 'Bump go version'). go.mod declares `go 1.27.3` with no toolchain directive, so the builder is golang:1.27.3-bookworm (upstream's own Dockerfile builds on golang:1.27.3). No go.work. 2026-10-27, 2026.10.4 (2026-10-26): go.mod still declares `go 1.27.3` and upstream's Dockerfile still builds on golang:1.27.3; its RELEASE_NOTES list VULN-176088 (debug endpoint allowlist on the metrics server), klauspost/compress v1.20.3, AUTH-9347 and TUN-11024 (build with the exact Go version from go.mod). BuildTime moved to the 2026.10.4 tag commit's date, 2026-10-26T09:34:58Z (dc3b264d).",
+    "_vendor_note": "vendor/ is NOT committed, so the vendor stage runs `go mod tidy -e && go mod vendor`. go.mod carries four replace directives (urfave/cli/v2 -> ipostelnik/cli/v2, prometheus/golang_client, gopkg.in/yaml.v3, and quic-go/quic-go -> chungthuang/quic-go, a fork based on quic-go v0.59.1); `go mod vendor` follows them, as upstream's build does.",
+    "_build_note": "Upstream builds with `make cloudflared` (CGO_ENABLED=0, GOFIPS140=off, no build tags on linux/amd64, no -s/-w) and, for its container image, CONTAINER_BUILD=1, which adds -X github.com/cloudflare/cloudflared/metrics.Runtime=virtual so the metrics server binds 0.0.0.0 instead of localhost. main.Version is the tag; main.BuildTime is upstream's `date -u -r RELEASE_NOTES` (a checkout's file mtime, so it differs per build); here it is the tag commit's date, so it is the same on every rebuild. A retarget must rewrite the BuildTime literal with the new commit's date.",
+    "commit": "dc57315806d5faa8715f728fd37b5302c81c467b",
+    "source_date_epoch": 1795440149,
+    "source_date_epoch_provenance": "the time release 2026.11.2-CE-ubuntu24.04-r1 was cut (2026-11-23T13:22:29Z), by scripts/retarget.py: ReadyStack dates an image by when its release was packaged (owner 2026-11-10), recorded here once and used by every rebuild of the release; it builds upstream commit dc57315806d5, dated 2026-11-23T11:41:20Z (source.commit_epoch).",
+    "source_date_epoch_basis": "release-cut",
+    "commit_epoch": 1795434080
+  },
+  "binaries_from_source": [
+    {
+      "name": "cloudflared",
+      "main_pkg": "./cmd/cloudflared",
+      "cgo_enabled": 0,
+      "build_tags": [],
+      "build_flags": [
+        "-trimpath"
+      ],
+      "ldflags": "-X main.Version=@VERSION@ -X main.BuildTime=2026-10-26T09:34:58Z -X github.com/cloudflare/cloudflared/metrics.Runtime=virtual",
+      "out_path": "/usr/local/bin/cloudflared",
+      "verify_subcmd": "--version",
+      "verify_contains": "cloudflared version @VERSION@ (built 2026-10-26T09:34:58Z)",
+      "_note": "Upstream's container-build ldflags (see source._build_note). `cloudflared --version` prints `cloudflared version 2026.10.3 (built 2026-10-21T10:51:09Z)`; upstream's release binary printed `(built 2026-10-21-13:11 UTC)`, its build host's file time. /usr/local/bin/cloudflared is upstream's own image path."
+    }
+  ],
+  "runtime_packages": [
+    "base-files",
+    "base-passwd",
+    "ca-certificates",
+    "coreutils",
+    "dash",
+    "libc6",
+    "libssl3t64",
+    "openssl",
+    "tzdata"
+  ],
+  "runtime_base": {
+    "kind": "chisel",
+    "shell": true,
+    "tools": [],
+    "packages": "vendored/chisel/packages.tsv"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "schema": "kitforge.source_tree_hash.v1",
+  "slug": "cloudflared",
+  "repo": "https://github.com/cloudflare/cloudflared",
+  "ref": "2026.11.2",
+  "commit": "dc57315806d5faa8715f728fd37b5302c81c467b",
+  "tree_listing_sha256": "0ca381f59364278563e355dce12623e00dd1d2f0f08e3232ee04b762c0fcdaf4",
+  "file_count": 488
+}

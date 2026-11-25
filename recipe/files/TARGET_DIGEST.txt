@@ -1,0 +1,8 @@
+image_manifest_digest=sha256:26e585bb55a1aa5108088bdf9c0e6af5ea6cf5c6f67cb19a253aa3d510c4d253
+config_digest=sha256:bd0fa74930d241e09d64dd6ecaf5aef727d00478c37a580fdf85a5443196ccde
+tag=readystack/cloudflared:2026.11.2-CE-ubuntu24.04-r1
+probe_port=20241
+probe_path=/ready
+probe_timeout=180
+verify_boot=skip
+verify_boot_reason=cloudflared connects out to Cloudflare's network: it starts only with your tunnel token (TUNNEL_TOKEN) and Internet access to Cloudflare, so the offline check cannot boot it; run it with your token as the admin handbook describes
